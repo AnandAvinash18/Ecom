@@ -32,8 +32,17 @@ public class OrderServiceImpl {
 		
 		Optional<Product> optionalProduct = productRepository.findById(productId);
 		if(optionalProduct.isEmpty()) {
-			throw new ProductNotFoundException("Product not Existing with id "+productId)
+			throw new ProductNotFoundException("Product not Existing with id "+productId);
 		}
+		else {
+			Product product=optionalProduct.get();
+			double unitPrice= product.getProductPrice();
+			double orderAmount=order.getQuantity()*unitPrice;
+			order.setOrderAmount(orderAmount);
+		}
+		
+		Order newOrder = orderRepository.save(order);
+		return newOrder;
 	}
 
 }
